@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ComCoast 3D Viewer</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Poppins',sans-serif;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#1f3c88,#4a69bd,#6a89cc);
+}
+
+/* main button */
+
+.mainBtn{
+padding:18px 40px;
+font-size:18px;
+font-weight:500;
+border:none;
+border-radius:40px;
+background:linear-gradient(135deg,#00c6ff,#0072ff);
+color:white;
+cursor:pointer;
+box-shadow:0 8px 20px rgba(0,0,0,0.25);
+transition:all .25s ease;
+}
+
+.mainBtn:hover{
+transform:translateY(-3px);
+box-shadow:0 12px 25px rgba(0,0,0,0.35);
+}
+
+/* popup */
+
+#popup{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.6);
+backdrop-filter:blur(4px);
+justify-content:center;
+align-items:center;
+}
+
+/* viewer window */
+
+#popupContent{
+width:85%;
+height:85%;
+border-radius:20px;
+overflow:hidden;
+background:rgba(255,255,255,0.1);
+backdrop-filter:blur(20px);
+box-shadow:0 20px 60px rgba(0,0,0,0.4);
+display:flex;
+flex-direction:column;
+}
+
+/* top bar */
+
+#topBar{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:15px;
+padding:15px;
+background:rgba(255,255,255,0.15);
+position:relative;
+}
+
+/* model buttons */
+
+.modelBtn{
+padding:10px 22px;
+border:none;
+border-radius:25px;
+font-size:14px;
+font-weight:500;
+color:white;
+background:linear-gradient(135deg,#ff7e5f,#feb47b);
+cursor:pointer;
+transition:all .25s ease;
+}
+
+.modelBtn:hover{
+transform:translateY(-2px);
+box-shadow:0 6px 15px rgba(0,0,0,0.25);
+}
+
+/* active button */
+
+.modelBtn.active{
+background:linear-gradient(135deg,#00c6ff,#0072ff);
+box-shadow:0 0 12px rgba(0,114,255,0.8);
+transform:scale(1.05);
+}
+
+/* close button */
+
+#closeBtn{
+position:absolute;
+right:20px;
+top:12px;
+font-size:22px;
+background:none;
+border:none;
+color:white;
+cursor:pointer;
+}
+
+/* viewer */
+
+#viewerFrame{
+flex:1;
+width:100%;
+border:none;
+background:black;
+}
+
+</style>
+</head>
+
+<body>
+
+<button class="mainBtn" onclick="openViewer('Pre')">
+Open ComCoast 3D Viewer
+</button>
+
+<div id="popup">
+
+<div id="popupContent">
+
+<div id="topBar">
+
+<button class="modelBtn active" onclick="loadModel('Pre',this)">Pre</button>
+<button class="modelBtn" onclick="loadModel('During',this)">During</button>
+<button class="modelBtn" onclick="loadModel('Post',this)">Post</button>
+
+<button id="closeBtn" onclick="closeViewer()">✕</button>
+
+</div>
+
+<iframe
+id="viewerFrame"
+title="ComCoast Viewer"
+allowfullscreen
+allow="autoplay; fullscreen; xr-spatial-tracking">
+</iframe>
+
+</div>
+</div>
+
+<script>
+
+const modelLinks = {
+
+Pre: "https://sketchfab.com/models/59ae86d2411844a285d2ddf60487ee86/embed?autostart=1&camera=0",
+
+During: "https://sketchfab.com/models/aa215c32bdf24d8ca26c7f04b5745822/embed?autostart=1&camera=0",
+
+// Post: "https://sketchfab.com/models/YOUR_POST_MODEL_ID/embed"
+
+};
+
+function openViewer(state){
+
+document.getElementById("popup").style.display="flex";
+
+const firstBtn=document.querySelector(".modelBtn.active");
+
+loadModel(state,firstBtn);
+
+}
+
+function loadModel(state,btn){
+
+document.getElementById("viewerFrame").src=modelLinks[state];
+
+document.querySelectorAll(".modelBtn").forEach(b=>{
+b.classList.remove("active");
+});
+
+btn.classList.add("active");
+
+}
+
+function closeViewer(){
+
+document.getElementById("popup").style.display="none";
+
+document.getElementById("viewerFrame").src="";
+
+}
+
+</script>
+
+</body>
+</html>
